@@ -1,0 +1,31 @@
+version: 2
+
+# Typically, we'd expect most tests to be defined on models rather than seeds.
+# I opted for seeds here because it was the most simple for demo purposes.
+# The config below would work just as well if these were all `models` instead of `seeds`.
+seeds:
+  - name: all_unique
+    columns:
+      - name: id
+        tests:
+          # built-in test
+          - unique
+          # custom generic test
+          - my_unique
+      - name: color
+        tests:
+          # built-in test
+          - unique
+          # custom generic test
+          - my_unique
+
+  - name: unique_combos
+    tests:
+      # existing test from a dbt package
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - alternating
+            - sub_ordering
+      # existing test from a different dbt package
+      - dbt_expectations.expect_compound_columns_to_be_unique:
+          column_list: ["alternating", "sub_ordering"]
